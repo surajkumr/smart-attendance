@@ -8,7 +8,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://hajirisystem.netlify.app/" 
+    "https://hajirisystem.netlify.app" 
   ],
   credentials: true
 }));
