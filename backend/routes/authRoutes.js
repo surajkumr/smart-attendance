@@ -28,11 +28,21 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
+  console.log("Login attempt:", email);
+
   const user = await User.findOne({ email });
-  if (!user) return res.status(400).json({ msg: "User not found" });
+  console.log("User found:", user);
+
+  if (!user) {
+    return res.status(400).json({ msg: "User not found" });
+  }
 
   const valid = await bcrypt.compare(password, user.password);
-  if (!valid) return res.status(400).json({ msg: "Invalid password" });
+  console.log("Password match:", valid);
+
+  if (!valid) {
+    return res.status(400).json({ msg: "Invalid password" });
+  }
 
   const token = jwt.sign(
     { id: user._id, role: user.role },
@@ -41,5 +51,3 @@ router.post("/login", async (req, res) => {
 
   res.json({ token, role: user.role });
 });
-
-module.exports = router;
