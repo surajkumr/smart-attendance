@@ -2,15 +2,25 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
-
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://hajirisystem.netlify.app"
+];
+
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://hajirisystem.netlify.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log("Blocked by CORS:", origin);
+      callback(null, true); // 🔥 temporarily allow all (debug)
+    }
+  },
   credentials: true
 }));
 
