@@ -10,7 +10,10 @@ function Login() {
   const { setRole } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    // Prevent the page from refreshing on form submission
+    if (e) e.preventDefault(); 
+    
     try {
       const res = await API.post("/auth/login", { email, password });
 
@@ -36,26 +39,31 @@ function Login() {
           Smart Attendance
         </h2>
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-3 mb-4 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        {/* Use a form tag with onSubmit */}
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full p-3 mb-4 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-3 mb-6 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full p-3 mb-6 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <button
-          onClick={handleLogin}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition"
-        >
-          Login
-        </button>
+          <button
+            type="submit" // Setting type to submit triggers onSubmit when Enter is pressed
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-lg transition"
+          >
+            Login
+          </button>
+        </form>
       </motion.div>
     </div>
   );
