@@ -11,18 +11,20 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like Postman)
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       console.log("Blocked by CORS:", origin);
-      callback(null, true); // 🔥 temporarily allow all (debug)
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true
 }));
+
+// 🔥 VERY IMPORTANT (fix preflight issue)
+app.options("*", cors());
 
 app.use(express.json());
 
