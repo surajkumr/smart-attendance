@@ -2,19 +2,22 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://hajirisystem.netlify.app"
-];
-
+// ✅ SIMPLE WORKING CORS
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(express.json());
+
+// ✅ ROOT ROUTE
+app.get("/", (req, res) => {
+  res.send("API is running 🚀");
+});
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
